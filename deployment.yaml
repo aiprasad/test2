@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dolly-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: dolly-app
+  template:
+    metadata:
+      labels:
+        app: dolly-app
+    spec:
+      containers:
+      - name: dolly-app
+        image: <place-holder-docker-image-name>
+        ports:
+        - containerPort: 5000
