@@ -1,0 +1,16 @@
+# Use Python base image from DockerHub
+FROM python:3.8-slim-buster
+
+WORKDIR /app
+
+# Copy the dependencies file to the working directory
+COPY requirements.txt .
+
+# Install any dependencies
+RUN pip install -r requirements.txt
+
+# Copy the content of the local src directory to the working directory
+COPY src/ .
+
+# Specify the command to run on container start
+CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:5000", "server:app"]
