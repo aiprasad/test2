@@ -19,6 +19,8 @@ RUN pip install -r requirements.txt
 # Copy the content of the local src directory to the working directory
 COPY . .
 
+EXPOSE 5000
+
 # Specify the command to run on container start
 CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:5000", "app:app"]
 
