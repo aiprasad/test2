@@ -1,5 +1,4 @@
 torch
 accelerate
 transformers
-Flask
 uvicorn
