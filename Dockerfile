@@ -22,5 +22,5 @@ COPY . .
 EXPOSE 7860
 
 # Specify the command to run on container start
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "7860"]
+CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "7860"]
 
