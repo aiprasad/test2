@@ -14,13 +14,13 @@ COPY requirements.txt .
 
 # Install any dependencies
 RUN pip install --upgrade pip
-RUN pip install -r requirements.txt
+RUN pip install --no-cache-dir --upgrade -r requirements.txt
 
 # Copy the content of the local src directory to the working directory
 COPY . .
 
-EXPOSE 5000
+EXPOSE 7860
 
 # Specify the command to run on container start
-CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:5000", "app:app"]
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "7860"]
 
