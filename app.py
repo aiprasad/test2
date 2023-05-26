@@ -1,5 +1,6 @@
-from transformers import GPT2LMHeadModel, GPT2Tokenizer
 import torch
+from transformers import GPT2LMHeadModel, GPT2Tokenizer
+from fastapi import FastAPI
 
 # Pretrained model name
 PRETRAINED_MODEL_NAME = "gpt2"
