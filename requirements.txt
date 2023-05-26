@@ -2,4 +2,4 @@ torch
 accelerate
 transformers
 Flask
-gunicorn
+uvicorn
