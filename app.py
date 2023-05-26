@@ -1,13 +1,35 @@
+from transformers import GPT2LMHeadModel, GPT2Tokenizer
 import torch
-from flask import Flask, request
-from transformers import pipeline
 
-app = Flask(__name__)
+# Pretrained model name
+PRETRAINED_MODEL_NAME = "gpt2"
 
-# Load the model
-generate_text = pipeline(model="databricks/dolly-v2-3b", torch_dtype=torch.bfloat16, trust_remote_code=True, device_map="auto")
+# Initialize tokenizer
+tokenizer = GPT2Tokenizer.from_pretrained(PRETRAINED_MODEL_NAME)
 
-@app.route('/generate', methods=['POST'])
-def generate():
-    prompt = request.json['prompt']
-    return generator(prompt, max_length=100, do_sample=True, temperature=0.9)
+# Initialize model
+model = GPT2LMHeadModel.from_pretrained(PRETRAINED_MODEL_NAME)
+
+# Load state dictionary from pickle file
+model.load_state_dict(torch.load("pytorch_model.bin"))
+
+app = FastAPI()
+
+@app.get("/")
+def read_root():
+    return {"Hello": "World"}
+
+@app.post("/generate/")
+async def generate_text(input: InputText):
+    # Preprocess text input
+    input_ids = tokenizer.encode(input.text, return_tensors="pt")
+    
+    # Generate text
+    # You may want to adjust parameters here for text generation
+    output = model.generate(input_ids, max_length=100, num_return_sequences=1, temperature=0.7)
+
+    # Decode generated text
+    generated_text = tokenizer.decode(output[:, input_ids.shape[-1]:][0], skip_special_tokens=True)
+    
+    return {"generated_text": generated_text}
+
