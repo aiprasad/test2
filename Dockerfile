@@ -1,26 +1,31 @@
-# Use Python base image from DockerHub
-FROM python:3.8-slim-buster
+#use base image offical from python
+FROM python:3.9
 
+#set directory for the application
 WORKDIR /app
 
-# Install gcc and other dependencies
+#system package installation and remove package list to save disk space
 RUN apt-get update && apt-get install -y \
     gcc \
     python3-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy the dependencies file to the working directory
-COPY requirements.txt .
+#copy the requirements file
+COPY requirements.txt ./
 
-# Install any dependencies
+#install dependencies
 RUN pip install --upgrade pip
-RUN pip install --no-cache-dir --upgrade -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the content of the local src directory to the working directory
+# Install Gunicorn
+RUN pip install gunicorn
+
+#copy the application code
 COPY . .
 
-EXPOSE 7860
+#expose the required port
+EXPOSE 8000
 
-# Specify the command to run on container start
-CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "7860"]
+#start the flask application
+CMD ["gunicorn", "app:app", "-b", "0.0.0.0:8000", "--workers", "4"]
 
